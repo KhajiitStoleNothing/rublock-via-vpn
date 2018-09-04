@@ -1,0 +1,6 @@
+#!/bin/sh
+
+ip route flush table 1
+ip rule del table 1
+ip rule add fwmark 7 table 1 priority 1000
+ip route add default via $5 table 1

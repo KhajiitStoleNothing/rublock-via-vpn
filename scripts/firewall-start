@@ -1,0 +1,15 @@
+#!/bin/sh
+
+if [ ! -z "$(ipset --swap rublock rublock 2>&1 | grep 'given name does not exist')" ]; then
+	ipset -N rublock iphash
+	cat /jffs/configs/rublock.conf.ips /jffs/configs/rublock.custom.ips > /jffs/configs/rublock.aio.ips
+	for IP in $(cat /jffs/configs/rublock.aio.ips); do ipset -A rublock $IP; done
+fi
+
+if [ ! "$(iptables -t mangle -L PREROUTING | grep rublock)" ]; then
+	iptables -A PREROUTING -t mangle -m set --match-set rublock dst,src -j MARK --set-mark 7
+fi
+
+for i in /proc/sys/net/ipv4/conf/*/rp_filter; do echo 0 > $i; done
+
+cru a RUBLOCK "10 4 * * * /jffs/bin/rublock-init"

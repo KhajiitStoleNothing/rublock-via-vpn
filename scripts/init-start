@@ -1,0 +1,4 @@
+#!/bin/sh
+
+modprobe ip_set_hash_ip
+modprobe xt_set

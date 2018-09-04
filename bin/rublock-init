@@ -1,0 +1,9 @@
+#!/bin/sh
+
+BINDIR=/jffs/bin/
+CONFDIR=/jffs/configs/
+
+logger -t RUBLOCK Update started at $(date)
+logger -t RUBLOCK INFO @ $(${BINDIR}/rublock-update)
+
+cat ${CONFDIR}/dnsmasq.custom.add >> ${CONFDIR}/dnsmasq.conf.add
